@@ -80,7 +80,9 @@ class GaLoreProjector:
             float_data = True
             matrix = module_params.data
 
-        U, s, Vh = torch.linalg.svd(matrix, full_matrices = False)
+        with torch.cuda.amp.autocast(False):
+            U, s, Vh = torch.svd_lowrank(matrix, q=rank, niter=2)
+            Vh = Vh.T
 
         #make the smaller matrix always to be orthogonal matrix
         if type=='right':
