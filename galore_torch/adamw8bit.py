@@ -61,7 +61,7 @@ class AdamW8bit(Optimizer2State):
                     p.saved_data = p.data.clone()
                     p.data = grad.clone().to(p.data.dtype).to(p.data.device)
                     p.data.zero_()
-                    p.grad = grad
+                    p.grad = grad.to(p.data.dtype).to(p.data.device)
 
                 if 'state1' not in state:
                     self.init_state(group, p, gindex, pindex)
